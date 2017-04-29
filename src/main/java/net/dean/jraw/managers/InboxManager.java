@@ -6,6 +6,7 @@ import net.dean.jraw.http.NetworkException;
 import net.dean.jraw.http.RestResponse;
 import net.dean.jraw.models.Captcha;
 import net.dean.jraw.models.Message;
+import net.dean.jraw.models.PrivateMessage;
 import net.dean.jraw.util.JrawUtils;
 
 import java.util.Map;
@@ -41,6 +42,15 @@ public class InboxManager extends AbstractManager {
                 .endpoint(read ? Endpoints.READ_MESSAGE : Endpoints.UNREAD_MESSAGE)
                 .post(JrawUtils.mapOf("id", JrawUtils.joinVarargsFullname(m, more)))
                 .build());
+
+        for (int i = 0; i < more.length; i++) {
+            if(more[i] instanceof PrivateMessage){
+                PrivateMessage pm = (PrivateMessage) more[i];
+                pm.markThreadRead(read);
+                pm.markChildrenAsRead(read);
+
+            }
+        }
     }
 
     /**

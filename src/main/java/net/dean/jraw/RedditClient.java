@@ -92,7 +92,7 @@ public class RedditClient extends RestClient {
     /**
      * Provides this RedditClient with the information to perform OAuth2-related activities. This method
      * <strong>must</strong> be called in order to use the API. All endpoints will return a 403 Forbidden otherwise.
-     * @param authData Authentication data. Most commonly obtained from {@link #getOAuthHelper()}.
+     * @param oldToken 
      * @throws NetworkException Thrown when there was a problem setting the authenticated user. Can only happen when
      *                          the authentication method is not userless.
      */

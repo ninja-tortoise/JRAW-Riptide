@@ -10,7 +10,11 @@ import java.util.List;
  * @param <T> The type of elements that will be in this Listing
  */
 public final class FauxListing<T extends RedditObject> extends Listing<T> {
-    /** Instantiates a new FauxListing with a null More */
+    /** Instantiates a new FauxListing with a null More
+     * @param children
+     * @param before
+     * @param after
+     * */
     public FauxListing(List<T> children, String before, String after) {
         this(children, before, after, null);
     }

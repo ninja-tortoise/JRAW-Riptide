@@ -47,7 +47,8 @@ public class UserContributionPaginator extends GenericPaginator<Contribution> {
 
     @Override
     public String[] getWhereValues() {
-        return new String[] {"overview", "gilded", "submitted", "liked", "disliked", "hidden", "saved", "comments"};
+        return new String[] {"overview", "gilded", "submitted", "liked", "disliked", "hidden", "saved", "comments",
+                "upvoted", "downvoted"};
     }
 
     /**

@@ -51,6 +51,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     destinationDir = releaseDest
     from javadoc.destinationDir
+
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

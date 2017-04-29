@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * <p>This class assists developers using this library in authenticating users via OAuth2. For the app types of
  * 'installed' or 'web', a typical use of this class is as follows:
- * <p/>
+ * <p>
  * <ol>
  * <li>Obtain an authorization URL using {@link #getAuthorizationUrl(Credentials, boolean, String...)}.
  * <li>Point the user's browser to that URL and have the user login and then press either 'yes' or 'no' on the
@@ -35,7 +35,7 @@ import java.util.Map;
  * errors. Once the response's integrity has been verified, a request to obtain the OAuth access code will be
  * made and an instance of {@link OAuthData} retrieved.
  * </ol>
- * <p/>
+ * <p>
  * <p>Authentication is simpler when the app type is 'script', as this enables the bypassing of showing the initial
  * authorization URL to the user. However, it comes at the cost of only being able to log into the accounts of users
  * registered as "developers." To authenticate with a 'script' app or in a userless context, one may simply use
@@ -202,7 +202,7 @@ public class OAuthHelper {
 
     /**
      * Wrapper method for {@link #easyAuth(Credentials)} that uses cached JSON data for Authentication.
-     * <p/>
+     * <p>
      * NOTE: This will NOT try to refresh the token if the OAuthData is expired
      *
      * @param creds    The credentials to use.
@@ -356,7 +356,7 @@ public class OAuthHelper {
 
     /**
      * Wrapper method for {@link #refreshToken(Credentials)} that uses cached JSON data for Authentication.
-     * <p/>
+     * <p>
      * NOTE: This will NOT try to refresh the token if the OAuthData is expired
      *
      * @param creds    The credentials used to request the original access token. Only the client ID and client secret will

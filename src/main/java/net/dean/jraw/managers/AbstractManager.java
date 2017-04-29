@@ -27,9 +27,9 @@ public abstract class AbstractManager {
      * @return A representation of the response by the Reddit API
      * @throws NetworkException If the request was not successful
      *                          HTTP request.
+     * @throws ApiException  If the reddit API returned an error
      */
-    protected RestResponse genericPost(HttpRequest r) throws NetworkException, ApiException {
-        if (!r.getMethod().equals("POST")) {
+    protected RestResponse genericPost(HttpRequest r) throws NetworkException, ApiException { if (!r.getMethod().equals("POST")) {
             throw new IllegalArgumentException("Request is not POST");
         }
 

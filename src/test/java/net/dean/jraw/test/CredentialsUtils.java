@@ -28,7 +28,7 @@ public final class CredentialsUtils {
             installedRedirectUri = System.getenv("INSTALLED_REDIRECT_URI");
         } else {
             // Read credentials.json
-            InputStream in = RedditTest.class.getResourceAsStream("/credentials.json");
+            InputStream in = RedditTest.class.getResourceAsStream("/../..credentials.json");
             if (in == null) {
                 throw new SetupRequiredException("credentials.json could not be found.");
             }

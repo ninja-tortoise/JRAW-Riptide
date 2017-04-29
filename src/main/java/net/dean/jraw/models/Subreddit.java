@@ -2,6 +2,7 @@ package net.dean.jraw.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.dean.jraw.models.meta.JsonProperty;
 import net.dean.jraw.models.meta.Model;
 import net.dean.jraw.util.Dimension;
@@ -177,6 +178,10 @@ public final class Subreddit extends Thing implements Comparable<Subreddit> {
     @JsonProperty
     public Boolean isUserSubscriber() {
         return data("user_is_subscriber", Boolean.class);
+    }
+
+    public void setIsUserSubscriber(boolean isSubscriber){
+        ((ObjectNode)getDataNode()).put("user_is_subscriber", isSubscriber);
     }
 
     /** Gets the URL to the banner displayed at the top of the subreddit. May be empty if none is available. */

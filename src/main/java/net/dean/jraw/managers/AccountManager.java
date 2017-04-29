@@ -24,6 +24,7 @@ import net.dean.jraw.models.Thing;
 import net.dean.jraw.models.UserRecord;
 import net.dean.jraw.models.VoteDirection;
 import net.dean.jraw.models.attr.Votable;
+import net.dean.jraw.models.factories.ContributionFactory;
 import net.dean.jraw.util.JrawUtils;
 
 import java.net.URL;
@@ -128,7 +129,7 @@ public class AccountManager extends AbstractManager {
      * Reports a comment or submission.
      *
      * @param s             The submission to vote on
-     * @param voteDirection How to vote
+     * @param reason        The reason for reporting
      * @param <T>           The Votable Thing to vote on
      * @throws NetworkException If the request was not successful
      * @throws ApiException     If the API returned an error
@@ -180,7 +181,8 @@ public class AccountManager extends AbstractManager {
     /**
      * Saves a given submission
      *
-     * @param s The submission to save
+     * @param s                 The submission to save
+     * @param category          A category name to save under
      * @throws NetworkException If the request was not successful
      * @throws ApiException     If the API returned an error
      */
@@ -247,8 +249,9 @@ public class AccountManager extends AbstractManager {
     /**
      * Sets whether or not a submission is hidden
      *
-     * @param s    The submission to hide or unhide
      * @param hide If the submission is to be hidden
+     * @param s    The submission to hide or unhide
+     * @param more An array od submissions
      * @throws NetworkException If the request was not successful
      * @throws ApiException     If the API returned an error
      */
@@ -272,10 +275,12 @@ public class AccountManager extends AbstractManager {
     /**
      * Updates the body of a self-text Submission or Comment
      *
+     * @param <T>           This is the type parameter
      * @param contribution The self-post or comment that to edit the text for
      * @param text         The new body
      * @throws NetworkException If the request was not successful
      * @throws ApiException     If the API returned an error
+     *
      */
     @EndpointImplementation(Endpoints.EDITUSERTEXT)
     public <T extends PublicContribution> void updateContribution(T contribution, String text) throws NetworkException, ApiException {
@@ -290,6 +295,7 @@ public class AccountManager extends AbstractManager {
     /**
      * Sends a reply to a Comment, Submission, or Message.
      *
+     * @param <T>           This is the type parameter
      * @param contribution The contribution to reply to
      * @param text         The body of the message, formatted in Markdown
      * @return The ID of the newly created reply
@@ -297,7 +303,7 @@ public class AccountManager extends AbstractManager {
      * @throws ApiException     If the Reddit API returned an error
      */
     @EndpointImplementation(Endpoints.COMMENT)
-    public <T extends Contribution> String reply(T contribution, String text) throws NetworkException, ApiException {
+    public <T extends Contribution> Contribution reply(T contribution, String text) throws NetworkException, ApiException {
         RestResponse response = genericPost(reddit.request()
                 .endpoint(Endpoints.COMMENT)
                 .post(JrawUtils.mapOf(
@@ -306,7 +312,7 @@ public class AccountManager extends AbstractManager {
                         "thing_id", contribution.getFullName()
                 )).build());
 
-        return response.getJson().get("json").get("data").get("things").get(0).get("data").get("id").asText();
+        return ContributionFactory.newContribution(contribution, response.getJson().get("json").get("data").get("things").get(0).get("data"));
     }
 
     /**
@@ -319,6 +325,7 @@ public class AccountManager extends AbstractManager {
     @EndpointImplementation(Endpoints.SUBSCRIBE)
     public void subscribe(Subreddit subreddit) throws NetworkException {
         setSubscribed(subreddit, true);
+        subreddit.setIsUserSubscriber(true);
     }
 
     /**
@@ -337,6 +344,7 @@ public class AccountManager extends AbstractManager {
      *
      * @return List of saved categories for the logged in user
      * @throws NetworkException If the request was not successful
+     * @throws ApiException If the reddit API returned an error
      */
     @EndpointImplementation(Endpoints.SAVED_CATEGORIES)
     public List<String> getSavedCategories() throws NetworkException, ApiException {
@@ -356,6 +364,7 @@ public class AccountManager extends AbstractManager {
      */
     public void unsubscribe(Subreddit subreddit) throws NetworkException {
         setSubscribed(subreddit, false);
+        subreddit.setIsUserSubscriber(false);
     }
 
     /**
@@ -513,6 +522,9 @@ public class AccountManager extends AbstractManager {
 
     /**
      * Gives gold to a comment or submission
+     * @param target
+     * @throws NetworkException
+     * @throws ApiException If the reddit API returned an error
      */
     @EndpointImplementation(Endpoints.OAUTH_GOLD_GILD_FULLNAME)
     public void giveGold(PublicContribution target) throws NetworkException, ApiException {

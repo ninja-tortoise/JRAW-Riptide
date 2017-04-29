@@ -46,15 +46,14 @@ import java.util.concurrent.locks.ReentrantLock;
  *       |   \
  *     f,g,h  i
  * </pre>
- * <p>
  * <p>Node {@code z} represents the root node (submission) with a depth of 0. Node {@code a} is a top level reply to
  * that submission with a depth of 1. Nodes {@code f}, {@code g} and {@code h}, and {@code i} have a depth of 3. This
  * tree can be traversed using several different methods: Pre-order ({@code abcfghdi}), post-order ({@code bfghcida}),
  * and breadth-first ({@code abcdfghi}).
- * <p>
+ *
  * <p>Note that although this class implements {@link Iterable}, the provided Iterator will only iterate through direct
  * children. To walk the entire tree, use {@link #walkTree()}
- *
+ *<p>
  * @author Matthew Dean
  */
 public final class CommentNode implements Iterable<CommentNode> {
@@ -86,6 +85,7 @@ public final class CommentNode implements Iterable<CommentNode> {
      * @param ownerId         The Submission's fullname (ex: t3_92dd8)
      * @param topLevelReplies A list of top level replies to this submission
      * @param more            A MoreChildren object which can be used to retrieve more comments later
+     * @param commentSort     Sort type for the comments
      */
     public CommentNode(String ownerId, List<Comment> topLevelReplies, MoreChildren more, CommentSort commentSort) {
         // Validate only the public constructor because this value will be passed to the private constructor when the
@@ -332,8 +332,8 @@ public final class CommentNode implements Iterable<CommentNode> {
      * Notifies the tree that a comment was edited
      *
      * @param reddit Used to make the request
-     * @return
-     * @throws NetworkException
+     * @return CommentNode
+     * @throws NetworkException If the request was not successful
      */
     public CommentNode notifyCommentChanged(RedditClient reddit) throws NetworkException {
         // Assert every Thing is either a Comment or a MoreChildren
